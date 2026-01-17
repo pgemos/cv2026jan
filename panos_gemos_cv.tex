@@ -1,0 +1,311 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[default]{lato}
+\usepackage[margin=1.2cm, left=6.2cm, top=0.6cm, right=0.6cm, bottom=0.6cm]{geometry}
+\usepackage{fontawesome5}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, calc}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+% Define Colors
+\definecolor{sidebarcolor}{RGB}{30,30,35}
+\definecolor{maintext}{RGB}{40,40,40}
+\definecolor{accentcolor}{RGB}{255, 80, 0}
+\definecolor{lightgray}{RGB}{230,230,230}
+\definecolor{sidebartext}{RGB}{240,240,240}
+
+% Page Layout Setup
+\setlength{\parindent}{0pt}
+\pagestyle{empty}
+
+% Indented lists
+\setlist[itemize]{leftmargin=1.2em, itemindent=0em, noitemsep, topsep=1pt}
+
+% Custom Commands for Sidebar
+\newcommand{\sidebarsection}[1]{
+    \vspace{1.5em}
+    {\large\textbf{\color{accentcolor}\uppercase{#1}}}\\[4pt]
+    \color{sidebartext}
+}
+
+% Custom Commands for Main Body
+\newcommand{\mainsection}[1]{
+    \vspace{1.2em}
+    {\Large\textbf{\color{accentcolor}\uppercase{#1}}}
+    \vspace{2pt}
+    \hrule height 0.5pt
+    \vspace{0.5em}
+}
+
+% Job Role Command (Title, Date, Employer, Location)
+\newcommand{\jobrole}[4]{
+    \noindent \textbf{#1} \hfill {\small \color{gray} #2} \\
+    {\color{accentcolor}\textit{#3}} \hfill {\small \textit{#4}}
+    \vspace{1pt}
+}
+
+% Education Command (Degree, Date, University, Details)
+\newcommand{\edurole}[4]{
+    \noindent \textbf{#1} \hfill {\small \color{gray} #2} \\
+    {\color{accentcolor}\textit{#3}} 
+    \par
+    {\small #4}
+    \vspace{4pt}
+}
+
+% Tag command
+\newcommand{\tagitem}[1]{%
+    \tikz[baseline=(char.base)]{
+        \node[anchor=base, rounded corners=2pt, inner sep=2pt, fill=lightgray, text=black!70, font=\scriptsize] (char) {#1};
+    }%
+}
+
+% Command for drawing a 5-star skill bar (Left-to-Right)
+% Usage: \starskill{Skill Name}{3}
+\newcommand{\starskill}[2]{%
+    \noindent
+    \begin{tikzpicture}
+        % Skill Name
+        \node [anchor=west] at (0,0) {\small #1};
+        
+        % Draw 5 Stars
+        \foreach \x in {1,...,5} {
+            % Calculate position (starting from 2.5cm to the right of text)
+            \pgfmathsetmacro\xpos{2.3 + (\x * 0.4)}
+            
+            \ifnum \x > #2
+                % Empty star (outline) for x > rating
+                \node [anchor=center] at (\xpos, 0) {\small \color{gray}\faStar[regular]};
+            \else
+                % Filled star for x <= rating
+                \node [anchor=center] at (\xpos, 0) {\small \color{accentcolor}\faStar};
+            \fi
+        }
+    \end{tikzpicture}\\[2pt]
+}
+
+
+\begin{document}
+
+% ==================== SIDEBAR (Absolute Positioning) ====================
+\begin{tikzpicture}[remember picture, overlay]
+    % Dark Background Bar
+    \fill[sidebarcolor] (current page.north west) rectangle ++(5.6cm, -\paperheight);
+
+    % Sidebar Main Content Container
+    \node[anchor=north west, inner sep=0pt, outer sep=0pt, text width=4.6cm, align=left] 
+    at ($(current page.north west)+(0.5cm, -1cm)$) {
+
+        \begin{center}
+            % Photo placeholder
+            \begin{tikzpicture}
+                \clip (0,0) circle (1.6cm);
+                % Uncomment next line for photo:
+                \node[anchor=center, inner sep=0pt] at (0,0) {\includegraphics[width=3.2cm]{img/photo.jpg}}; 
+                % Uncomment next two lines for placeholder image
+                % \fill[fill=lightgray] (-1.4,-1.4) rectangle (1.4,1.4);
+                % \node[color=gray] at (0,0) {\Large \faUser};
+            \end{tikzpicture}
+
+            \vspace{0.4cm}
+
+            \color{white}
+            {\huge \textbf{Panos Gemos}}\\[2pt]
+            {\small \textit{PhD Candidate | AI Researcher}}
+        \end{center}
+
+        \color{sidebartext}
+
+        % CONTACT
+        \sidebarsection{Contact}
+        \faMapMarker* \ Athens, Greece\\[5pt]
+        \faEnvelope \ \href{mailto:panosgemos@gmail.com}
+        {\color{sidebartext}\footnotesize panosgemos@gmail.com}\\[5pt]
+        \faPhone \ \href{tel:+306971835476}
+        {\color{sidebartext}\footnotesize +30 697 183 5476}\\[5pt]
+        \faLinkedin \ \href{https://linkedin.com/in/gemos}
+        {\color{sidebartext}\footnotesize /in/gemos}\\[5pt]
+        \faGithub \ \href{https://github.com/panosgemos}
+        {\color{sidebartext}\footnotesize /panosgemos}\\[5pt]
+        \faStackOverflow \ \href{https://stackoverflow.com/users/4501084}
+        {\color{sidebartext}\footnotesize StackOverflow}
+
+        % SKILLS
+        \sidebarsection{Skills}
+        
+        \starskill{Python}{5}
+        \starskill{Data Analysis}{5}
+        \starskill{Deep Learning}{4}
+        \starskill{SQL}{4} % or "Data Analysis"
+        \starskill{LaTeX}{3}
+
+        % Toolkit
+        \vspace{2pt} % A little breathing room
+        {\footnotesize \textbf{Toolkit:} Git, Docker, Linux, Bash}
+        
+        % HONORS & AWARDS
+        \sidebarsection{Honors \& Awards}
+        {\footnotesize
+        \begin{itemize}[leftmargin=1em, noitemsep, topsep=0pt]
+            \item \textbf{IKY Chrysovergis\\Doctoral Scholarship}\\
+            {\scriptsize Competitive national funding supporting PhD studies (2024).}
+            
+            \item \textbf{Valedictorian \& Georgios Karampatzos Award}\\
+            {\scriptsize Highest GPA in University (2017).}
+            
+            \item \textbf{ELLAK Open Source Award}\\
+            {\scriptsize For cultural software contribution (2015).}
+            
+            \item \textbf{Head Organizer,\\FOSSCOMM 2017}\\
+            {\scriptsize Major open-source conference (2017).}
+            
+            \item \textbf{President, Student Association}\\
+            {\scriptsize Dept. Informatics \& Telematics, Harokopio University (2016-17).}
+        \end{itemize}
+        }
+        
+        % LANGUAGES
+        \sidebarsection{Languages}
+        \textbf{Greek} (Native)\\
+        \textbf{English} (ECPE - C2)\\
+
+        % HOBBIES
+        \sidebarsection{Interests}
+        {\small Open Source, Digital Privacy,}\\
+        {\small Traveling, Tennis, Cycling,}\\
+        {\small Cinema, Theater}
+
+    };
+
+    % Sidebar Footer Container
+    \node[anchor=south west, text width=4.6cm, align=right] 
+    at ($(current page.south west)+(0.5cm, 0.3cm)$) 
+    {
+        \tiny \color{gray} % Dimmed color
+        Built with \LaTeX --
+        \href{https://github.com/pgemos/cv2026jan}
+        {\color{gray} View Source \faGithub}
+    };
+\end{tikzpicture}
+
+% ==================== MAIN BODY ====================
+\vspace*{-0.5cm}
+\color{maintext}
+
+% PROFILE
+\mainsection{About Me}
+{\small Helping people and making a difference is what drives me. I have always been captivated by the potential of \textbf{Computer Science} and \textbf{Artificial Intelligence} to solve complex societal problems. I believe responsible technological progress relies on \textbf{open-source} collaboration and \textbf{privacy-preserving} architectures, and I am driven to build systems that uphold these values.}
+
+% EXPERIENCE
+\mainsection{Experience}
+
+\jobrole{Visiting Instructor \& Participant (Crypto Specialist)}{Nov 2024 -- Jun 2025}{BCA College (Executive Education)}{Athens, Greece}
+\begin{itemize} \small
+    \item Designed and delivered modules on \textbf{AI Agents}, \textbf{Financial Time Series Forecasting}, and \textbf{Prompt Engineering} tailored for the \textbf{Web3 \& Crypto} ecosystem.
+    \item Concurrently mastered the \textbf{Blockchain, Crypto \& Web3} curriculum, gaining deep domain expertise.
+    \item \tagitem{Web3} \tagitem{Blockchain} \tagitem{Forecasting} \tagitem{GenAI} \tagitem{Teaching}
+\end{itemize}
+
+\vspace{4pt}
+
+\jobrole{AI Researcher (Contractor)}{May 2024 -- Aug 2024}{KLEPTOTRACE Project (EU Co-funded)}{Athens, Greece}
+\begin{itemize} \small
+    \item Co-authored paper on \textbf{Entity Extraction via LLMs} for financial crime detection \href{https://arxiv.org/pdf/2409.13704}{\textsuperscript{\tiny [arXiv]}}.
+    \item Built \textbf{Knowledge Graph} construction pipelines from unstructured text in a \textbf{fully local} environment.
+    \item Deployed \textbf{open-weight LLMs} via Ollama for privacy-preserving inference without external APIs.
+    \item \tagitem{LLMs} \tagitem{Knowledge Graphs} \tagitem{Ollama} \tagitem{LangChain} \tagitem{NLP} \tagitem{Python}
+\end{itemize}
+
+\vspace{4pt}
+
+\jobrole{AI Computer Vision Researcher (Military Service)}{Mar 2023 -- Nov 2023}{Hellenic Army}{Greece}
+\begin{itemize} \small
+    \item Selected for the \textbf{Research, Technological Development and Innovation Center of the Hellenic Military} during mandatory service; contributed to 4-month intensive Computer Vision project.
+    \item Experimented with, trained, and deployed models on \textbf{resource-constrained hardware} (On-Device AI).
+    \item Fulfilled mandatory military service obligations.
+    \item \tagitem{Computer Vision} \tagitem{On-Device AI}
+\end{itemize}
+
+\vspace{4pt}
+
+\jobrole{Sr. Analytics Solutions Analyst}{Jun 2021 -- May 2022}{The Coca-Cola Company}{Athens, Greece}
+\begin{itemize} \small
+    \item \textbf{Promoted} to Senior role after just 3 months as Analytics Solutions Analyst (Jun 2021 -- Aug 2021).
+    \item Engineered robust \textbf{Time Series Forecasting} pipelines for complex commercial datasets.
+    \item \tagitem{Statsmodels} \tagitem{Scikit-learn} \tagitem{Forecasting} \tagitem{Azure} \tagitem{Databricks} \tagitem{PowerBI} \tagitem{Pandas} \tagitem{Python}
+\end{itemize}
+
+\vspace{4pt}
+
+\jobrole{Data Analyst}{Jan 2020 -- May 2021}{The Coca-Cola Company (via Comdata)}{Athens, Greece}
+\begin{itemize} \small
+    \item Co-developed a \textbf{Recommendation Engine} for HR Analytics.
+    \item Architected data collection pipelines (APIs) to support real-time reporting dashboards.
+    \item \tagitem{PySpark} \tagitem{Azure} \tagitem{Databricks} \tagitem{PowerBI} \tagitem{NLP} \tagitem{Pandas} \tagitem{Scikit-learn} \tagitem{Python} \tagitem{SQL}
+\end{itemize}
+
+\vspace{4pt}
+
+\jobrole{NLP Engineer (Erasmus+)}{Jan 2018 -- Jul 2018}{Middlesex University London}{London, UK}
+\begin{itemize} \small
+    \item Developed a semantic search engine matching jobs to courses and vice versa.
+    \item \tagitem{NLTK} \tagitem{SpaCy} \tagitem{Django} \tagitem{Full-Stack} \tagitem{Python} \tagitem{JavaScript}
+\end{itemize}
+
+\vspace{4pt}
+
+\jobrole{ML Researcher (Internship)}{Jul 2016 -- Sep 2016}{National Observatory of Athens}{Athens, Greece}
+\begin{itemize} \small
+    \item Created a magnetometer calibration app using time series analysis in Java and Octave/Matlab.
+\end{itemize}
+
+
+% EDUCATION
+\mainsection{Education}
+
+\edurole{PhD Candidate}{Jan 2024 -- Present}
+{Harokopio University of Athens}
+{\textit{Topic: Financial Time Series Forecasting using Deep Learning Techniques}}
+\vspace{-5pt}
+{\footnotesize \begin{itemize}
+    \item Investigating the efficacy of \textbf{Transformers vs. LSTMs} for long-horizon financial time series forecasting.
+    \item Pioneering a \textbf{text-to-graph methodology} to enrich quantitative models with insights from financial reports.
+\end{itemize}}
+
+\vspace{2pt}
+
+\edurole{MSc in Data Science \& IT -- Big Data \& AI}{Oct 2018 -- Present}
+{National and Kapodistrian University of Athens}
+{\textit{Thesis: "LLMGrapher: Transforming Texts to Knowledge Graphs with the Power of Large Language Models"}}
+\vspace{-5pt}
+{\footnotesize \begin{itemize}
+    \item Developed local, privacy-first pipeline converting text to graphs using \textbf{Ollama} and \textbf{Llama 3.1}.
+    \item Thesis Presented: Oct 2025 (Grade Pending).
+\end{itemize}}
+\vspace{-3pt}
+{\footnotesize Coursework Projects: Built Deep Learning \& classical ML solutions using \textbf{TensorFlow}, \textbf{Keras}, \textbf{Scikit-learn} and \textbf{NumPy}.}
+
+\vspace{3pt}
+
+\edurole{MSc in Digital Innovation \& Startup Entrepreneurship}{Oct 2020 -- Oct 2022}
+{National Technical University of Athens \& University of the Aegean}
+{\textit{Thesis: "Artificial Intelligence as a Business Incubator"}}
+\vspace{-5pt}
+{\footnotesize \begin{itemize}
+    \item Comparative analysis of AI business models tailored to specific organizational goals.
+\end{itemize}}
+\vspace{-3pt}
+{\footnotesize GPA: 9.04/10}
+
+\vspace{3pt}
+
+\edurole{BSc in Informatics and Telematics}{Sep 2013 -- Nov 2017}
+{Harokopio University of Athens}
+{\vspace{-3pt} \textit{Thesis: "Image Classification using Deep Learning Techniques"}}\\[-6pt]
+{\footnotesize GPA: 9.4/10 \textbf{(Valedictorian)}}
+
+\end{document}
